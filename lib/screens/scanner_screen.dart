@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
+import 'package:qr/screens/components/gtk_appbar.dart';
 
 import 'package:zxing2/qrcode.dart';
 
@@ -16,8 +17,9 @@ class ScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Result? result = scan(imagePath);
-    return Material(
-      child: Column(
+    return Scaffold(
+      appBar: const GTKAppBar(title: Text('Scaning result'),),
+      body: Column(
         children: [
           Image.file(File(imagePath)),
           result == null ? const Text('No QR code found') : Text(result.text)
