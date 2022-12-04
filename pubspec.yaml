@@ -19,6 +19,7 @@ dependencies:
   path: ^1.8.2
   qr_code_vision: ^0.1.0
   qr_utils: ^0.1.5
+  file_selector: ^0.9.2+2
 dev_dependencies:
   flutter_test:
     sdk: flutter
