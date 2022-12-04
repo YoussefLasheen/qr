@@ -1,6 +1,8 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:qr/screens/scanner_screen.dart';
+
+import 'package:camera/camera.dart';
+
+import 'scanner_screen.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({

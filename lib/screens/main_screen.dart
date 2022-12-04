@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:qr/screens/camera_screen.dart';
-
-import 'package:file_selector/file_selector.dart';
-import 'package:qr/screens/components/gtk_appbar.dart';
-import 'package:qr/screens/scanner_screen.dart';
-
 import 'dart:io' show Platform;
+import 'package:file_selector/file_selector.dart';
+
+import 'camera_screen.dart';
+import 'scanner_screen.dart';
+import 'components/gtk_appbar.dart';
+
+
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

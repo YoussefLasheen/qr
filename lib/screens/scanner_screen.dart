@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
-import 'package:qr/screens/components/gtk_appbar.dart';
-
+import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'components/gtk_appbar.dart';
 import 'package:zxing2/qrcode.dart';
 
 class ScannerScreen extends StatelessWidget {
