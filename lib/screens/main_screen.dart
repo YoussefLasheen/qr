@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr/screens/camera_screen.dart';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:qr/screens/scanner_screen.dart';
+
+import 'dart:io' show Platform;
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -26,8 +29,14 @@ class MainScreen extends StatelessWidget {
               label: 'images',
               extensions: <String>['jpg', 'png'],
             );
-            final XFile? file =
-                await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+            XFile? file;
+
+            if (Platform.isAndroid || Platform.isIOS) {
+              file = await ImagePicker().pickImage(source: ImageSource.gallery);
+            } else {
+              file =
+                  await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+            }
             if (file == null) {
               // Operation was canceled by the user.
               return;
