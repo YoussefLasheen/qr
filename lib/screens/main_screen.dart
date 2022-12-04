@@ -15,6 +15,7 @@ class MainScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        if(!Platform.isLinux)
         ElevatedButton(
           onPressed: () => Navigator.push(
             context,

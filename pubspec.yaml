@@ -21,6 +21,7 @@ dependencies:
   image: ^3.2.2
   image_picker: ^0.8.6
   handy_window: ^0.1.9
+  adwaita: ^0.5.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
