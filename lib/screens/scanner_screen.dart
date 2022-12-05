@@ -19,9 +19,7 @@ class ScannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Result? result = scan(imagePath);
     return Scaffold(
-      appBar: const GTKAppBar(
-        title: Text('Scaning result'),
-      ),
+      appBar: Platform.isLinux? const GTKAppBar(title: Text('Scaning result'),):null,
       body: result != null
           ? Center(
               child: SizedBox(
@@ -38,7 +36,7 @@ class ScannerScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(25),
                         child: PrettyQr(
                           data: result.text,
-                          elementColor: Colors.white,
+                          elementColor: Theme.of(context).colorScheme.onSurface,
                           size: 300,
                           roundEdges: true,
                         ),

@@ -20,8 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Platform.isLinux?AdwaitaThemeData.dark(): ThemeData(useMaterial3: true),
-      themeMode: ThemeMode.dark,
+      theme: Platform.isLinux?AdwaitaThemeData.light(): ThemeData.light(useMaterial3: true),
+      darkTheme: Platform.isLinux?AdwaitaThemeData.dark(): ThemeData.dark(useMaterial3: true),
+      //themeMode: ThemeMode.dark,
       home: const MainScreen(),
     );
   }

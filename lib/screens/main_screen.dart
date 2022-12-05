@@ -8,8 +8,6 @@ import 'camera_screen.dart';
 import 'scanner_screen.dart';
 import 'components/gtk_appbar.dart';
 
-
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -19,36 +17,41 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    ScanSection(),
-    GeneratorScreen(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const GTKAppBar(title: Text('QR Scanner'),),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      appBar: Platform.isLinux
+          ? const GTKAppBar(
+              title: Text('QR Scanner'),
+            )
+          : null,
+      bottomNavigationBar: NavigationBar(
+        destinations: const <NavigationDestination>[
+          NavigationDestination(
             icon: Icon(Icons.qr_code_scanner_rounded),
             label: 'Scan',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.plus_one_rounded),
             label: 'Generate',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
       ),
-      body:  Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      body: Center(
+        child: const[
+          ScanSection(),
+          GeneratorScreen(),
+        ][_selectedIndex],
+      ),
     );
   }
 }
@@ -79,8 +82,7 @@ class ScanSection extends StatelessWidget {
             XFile? file;
 
             if (Platform.isAndroid || Platform.isIOS) {
-              file =
-                  await ImagePicker().pickImage(source: ImageSource.gallery);
+              file = await ImagePicker().pickImage(source: ImageSource.gallery);
             } else {
               file =
                   await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
@@ -97,7 +99,7 @@ class ScanSection extends StatelessWidget {
                   ScannerScreen(imagePath: filePath),
             );
           },
-          child: const Text('Pick from gallery'),
+          child: Text('Pick from gallery', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
         ),
       ],
     );

@@ -49,7 +49,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                     padding: const EdgeInsets.all(25),
                     child: PrettyQr(
                       data: content!,
-                      elementColor: Colors.white,
+                      elementColor: Theme.of(context).colorScheme.onSurface,
                       size: 300,
                       roundEdges: roundEdges,
                       typeNumber: version,
@@ -239,8 +239,10 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextButton.icon(
+                ElevatedButton.icon(
                   style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                      minimumSize: const Size.fromHeight(65),
                      shape: RoundedRectangleBorder(
                        borderRadius: BorderRadius.circular(15.0),
@@ -300,6 +302,9 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                   },
                   icon: const Icon(Icons.save),
                   label: const Text('Save QR code'),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
               ],
             ),

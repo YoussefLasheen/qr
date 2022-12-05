@@ -8,16 +8,18 @@ class GTKAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     WindowManager wm = WindowManager.instance;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.07),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 5,
-            offset: const Offset(0, 0),
+        color: isDark
+            ? Colors.grey[850]
+            : const Color(0xFFebebeb),
+        border: Border(
+          bottom: BorderSide(
+            color: isDark?Colors.black45:Colors.grey[300]!,
+            width: 1,
           ),
-        ],
+        ),
       ),
       child: Directionality(
         textDirection: TextDirection.ltr,
@@ -38,7 +40,10 @@ class GTKAppBar extends StatelessWidget implements PreferredSizeWidget {
                       borderRadius: BorderRadius.circular(7),
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.arrow_back_rounded, size: 17,),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 17,
+                        ),
                       ),
                       onTap: () => Navigator.pop(context),
                     ),
@@ -92,13 +97,14 @@ class TitleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox.fromSize(
       size: const Size.square(24),
       child: Material(
-        color: Colors.white10,
+        color: isDark?Colors.white10:const Color(0xFFd9d9d9),
         shape: const CircleBorder(),
         child: IconButton(
-          color: Colors.white,
+          color: isDark?Colors.white:Colors.black,
           icon: Icon(icon),
           iconSize: 14,
           padding: EdgeInsets.zero,
