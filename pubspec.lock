@@ -113,6 +113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  cupertino_icons:
+    dependency: transitive
+    description:
+      name: cupertino_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -209,6 +216,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
+  flutter_spinbox:
+    dependency: "direct main"
+    description:
+      name: flutter_spinbox
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -588,6 +602,41 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.0"
+  yaru:
+    dependency: transitive
+    description:
+      name: yaru
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.4"
+  yaru_color_generator:
+    dependency: transitive
+    description:
+      name: yaru_color_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
+  yaru_colors:
+    dependency: transitive
+    description:
+      name: yaru_colors
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
+  yaru_icons:
+    dependency: transitive
+    description:
+      name: yaru_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.7"
+  yaru_widgets:
+    dependency: "direct main"
+    description:
+      name: yaru_widgets
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-beta-2"
   zxing2:
     dependency: "direct main"
     description:
@@ -597,4 +646,4 @@ packages:
     version: "0.1.1"
 sdks:
   dart: ">=2.18.5 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.3.0"
