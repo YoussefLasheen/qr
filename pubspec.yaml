@@ -26,6 +26,8 @@ dependencies:
   url_launcher: ^6.1.7
   yaru_widgets: ^2.0.0-beta-2
   flutter_spinbox: ^0.11.0
+  screenshot: ^1.2.3
+  file_picker: ^5.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,7 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
+import 'dart:io';
 
 class GeneratorScreen extends StatefulWidget {
   const GeneratorScreen({super.key, this.initialContent = 'lasheen'});
@@ -19,6 +22,8 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
   //bool calculateVersionAutomatically = true;
   bool roundEdges = true;
   int errorCorrectLevel = QrErrorCorrectLevel.M;
+
+  ScreenshotController screenshotController = ScreenshotController(); 
   @override
   Widget build(BuildContext context) {
     content ??= widget.initialContent;
@@ -32,7 +37,11 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(
+                  height: 30,
+                ),
                 Card(
+                  margin: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -48,7 +57,11 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Card(
+                  margin: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -76,7 +89,11 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Card(
+                  margin: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -218,6 +235,71 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                       ],
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                     minimumSize: const Size.fromHeight(65),
+                     shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(15.0),
+                     ),
+                  ),
+                  onPressed: () async {
+                    screenshotController
+                        .captureFromWidget(
+                      ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: PrettyQr(
+                            data: content!,
+                            elementColor: Colors.black,
+                            size: 300,
+                            roundEdges: roundEdges,
+                            typeNumber: version,
+                            errorCorrectLevel: errorCorrectLevel,
+                          ),
+                        ),
+                      ),
+                    )
+                        .then((imageBytes) async {
+                      String? outputFile = await FilePicker.platform.saveFile(
+                        dialogTitle: 'Please select an output file:',
+                        fileName: 'output-file.jpg',
+                        allowedExtensions: [
+                          'jpg',
+                          'png',
+                        ],
+                      );
+                      if (outputFile != null) {
+                        File image = File(outputFile);
+                        image.writeAsBytesSync(imageBytes);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Saved to $outputFile'),
+                          ),
+                        );
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Qr code not saved'),
+                          ),
+                        );
+                      }
+                    }).catchError((onError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Error: $onError'),
+                        ),
+                      );
+                    });
+                  },
+                  icon: const Icon(Icons.save),
+                  label: const Text('Save QR code'),
                 ),
               ],
             ),
