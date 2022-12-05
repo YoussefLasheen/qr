@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Scan',
           ),
           NavigationDestination(
-            icon: Icon(Icons.plus_one_rounded),
+            icon: Icon(Icons.add_box_outlined),
             label: 'Generate',
           ),
         ],
@@ -47,9 +47,9 @@ class _MainScreenState extends State<MainScreen> {
         onDestinationSelected: _onItemTapped,
       ),
       body: Center(
-        child: const[
+        child: const [
           ScanSection(),
-          GeneratorScreen(),
+          GeneratorSection(),
         ][_selectedIndex],
       ),
     );
@@ -61,47 +61,89 @@ class ScanSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (!Platform.isLinux)
-          ElevatedButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CameraScreen()),
+    return SizedBox(
+      width: 180,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (!Platform.isLinux)
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CameraScreen()),
+              ),
+              label: const Text('Open Camera'),
+              icon: const Icon(Icons.camera_alt_rounded),
             ),
-            child: const Text('Open Camera'),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
+            ),
+            onPressed: () async {
+              const XTypeGroup typeGroup = XTypeGroup(
+                label: 'images',
+                extensions: <String>['jpg', 'png'],
+              );
+              XFile? file;
+
+              if (Platform.isAndroid || Platform.isIOS) {
+                file =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+              } else {
+                file =
+                    await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+              }
+              if (file == null) {
+                // Operation was canceled by the user.
+                return;
+              }
+              final String filePath = file.path;
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScannerScreen(
+                    imagePath: filePath,
+                  ),
+                ),
+              );
+            },
+            label: Text(
+              'Pick from gallery',
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            icon: const Icon(Icons.photo_library_rounded),
           ),
-        const SizedBox(width: 20),
-        ElevatedButton(
-          onPressed: () async {
-            const XTypeGroup typeGroup = XTypeGroup(
-              label: 'images',
-              extensions: <String>['jpg', 'png'],
-            );
-            XFile? file;
+        ],
+      ),
+    );
+  }
+}
 
-            if (Platform.isAndroid || Platform.isIOS) {
-              file = await ImagePicker().pickImage(source: ImageSource.gallery);
-            } else {
-              file =
-                  await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-            }
-            if (file == null) {
-              // Operation was canceled by the user.
-              return;
-            }
-            final String filePath = file.path;
+class GeneratorSection extends StatelessWidget {
+  const GeneratorSection({super.key});
 
-            await showDialog<void>(
-              context: context,
-              builder: (BuildContext context) =>
-                  ScannerScreen(imagePath: filePath),
-            );
-          },
-          child: Text('Pick from gallery', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(75, 48),
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
         ),
-      ],
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const GeneratorScreen()),
+        ),
+        label: const Text('Generate QR Code'),
+        icon: const Icon(Icons.qr_code_rounded),
+      ),
     );
   }
 }

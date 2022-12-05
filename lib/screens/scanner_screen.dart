@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:image/image.dart' as img;
+import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:path/path.dart' as p;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +20,11 @@ class ScannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Result? result = scan(imagePath);
     return Scaffold(
-      appBar: Platform.isLinux? const GTKAppBar(title: Text('Scaning result'),):null,
+      appBar: Platform.isLinux
+          ? const GTKAppBar(
+              title: Text('Scaning result'),
+            )
+          : null,
       body: result != null
           ? Center(
               child: SizedBox(
@@ -29,6 +34,7 @@ class ScannerScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Card(
+                      margin: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
@@ -42,9 +48,13 @@ class ScannerScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     SizedBox(
                       width: double.infinity,
                       child: Card(
+                        margin: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
@@ -91,6 +101,31 @@ class ScannerScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton.icon(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onSurface,
+                        minimumSize: const Size.fromHeight(65),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => GeneratorScreen(
+                              initialContent: result.text,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.edit),
+                      label: const Text('Edit in generator'),
                     ),
                   ],
                 ),
