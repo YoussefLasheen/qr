@@ -1,4 +1,5 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -267,14 +268,19 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                       ),
                     )
                         .then((imageBytes) async {
-                      String? outputFile = await FilePicker.platform.saveFile(
-                        dialogTitle: 'Please select an output file:',
-                        fileName: 'output-file.jpg',
-                        allowedExtensions: [
-                          'jpg',
-                          'png',
-                        ],
-                      );
+                      String? outputFile;
+                      if (Platform.isAndroid) {
+                        outputFile = '${await AndroidPathProvider.downloadsPath}/qrcode.png';
+                      } else {
+                        outputFile = await getSavePath(
+                            suggestedName: 'qrcode.png',
+                            acceptedTypeGroups: [
+                              const XTypeGroup(
+                                label: 'PNGs',
+                                extensions: <String>['png'],
+                              )
+                            ]);
+                      }
                       if (outputFile != null) {
                         File image = File(outputFile);
                         image.writeAsBytesSync(imageBytes);
