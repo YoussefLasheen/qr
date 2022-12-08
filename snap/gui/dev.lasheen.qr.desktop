@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Qr Scanner
+Comment=A Qrcode scanner/generator
+Categories=Utility;
+Icon=${SNAP}/meta/gui/v1.png
+Exec=qr-scanner
+Terminal=false

@@ -1,0 +1,20 @@
+name: qr-scanner
+version: 1.0.0
+summary: A Qrcode scanner/generator
+description: An ad-free multi-platform Qr code scanner and generator
+
+confinement: strict
+base: core18
+grade: stable
+
+apps:
+  qr-scanner:
+    command: qr
+    extensions: [flutter-master] # Where "master" defines which Flutter channel to use for the build
+    plugs:
+      - home
+parts:
+  qr-scanner:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application
