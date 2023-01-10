@@ -2,7 +2,7 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:lasheen_qr/screens/components/gtk_appbar.dart';
+import 'package:gtk_window/gtk_window.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -31,8 +31,8 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
     content ??= widget.initialContent;
     return Scaffold(
       appBar: Platform.isLinux
-          ? const GTKAppBar(
-              title: Text('QR Code Generator'),
+          ? const GTKHeaderBar(
+              middle: Text('QR Code Generator'),
             )
           : null,
       body: SizedBox(
