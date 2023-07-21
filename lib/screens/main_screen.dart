@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io' show Platform;
+import 'dart:io' show Directory, Platform;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screen_capturer/screen_capturer.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 import 'camera_screen.dart';
@@ -68,7 +70,7 @@ class ScanSection extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(75, 48),
+            minimumSize: const Size(225, 48),
             foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () async {
@@ -105,6 +107,39 @@ class ScanSection extends StatelessWidget {
           ),
           icon: const Icon(Icons.photo_library_rounded),
         ),
+        const SizedBox(height: 10),
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(225, 48),
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
+          ),
+          onPressed: () async {
+            Directory directory = await getTemporaryDirectory();
+            String imageName =
+                'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
+            String imagePath =
+                '${directory.path}/qr_scanner/screenshots/$imageName';
+            CapturedData? capturedData = await screenCapturer.capture(
+              mode: CaptureMode.region,
+              imagePath: imagePath,
+            );
+            if (capturedData != null) {
+              Future(
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ScannerScreen(
+                      imagePath: capturedData.imagePath!,
+                    ),
+                  ),
+                ),
+              );
+            }
+          },
+          label: const Text('Take a screenshot'),
+          icon: const Icon(Icons.screenshot_monitor_rounded),
+        ),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -126,7 +161,7 @@ class GeneratorSection extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(75, 48),
+            minimumSize: const Size(225, 48),
             foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () => Navigator.push(

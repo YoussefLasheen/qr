@@ -29,6 +29,7 @@ dependencies:
   screenshot: ^2.1.0
   gallery_saver: ^2.3.2
   android_path_provider: ^0.3.0
+  screen_capturer: ^0.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
