@@ -12,13 +12,13 @@ import 'package:yaru_widgets/yaru_widgets.dart';
 import 'package:zxing2/qrcode.dart';
 
 class ScannerScreen extends StatelessWidget {
-  final String imagePath;
+  final Uint8List imageBytes;
 
-  const ScannerScreen({super.key, required this.imagePath});
+  const ScannerScreen({super.key, required this.imageBytes});
 
   @override
   Widget build(BuildContext context) {
-    Result? result = scan(imagePath);
+    Result? result = scan(imageBytes);
     return Scaffold(
       appBar: const YaruWindowTitleBar(
         title: Text('Scanner'),
@@ -126,28 +126,19 @@ class ScannerScreen extends StatelessWidget {
   }
 }
 
-Result? scan(String filepath) {
-  File file = File(filepath);
-  Uint8List bytes = file.readAsBytesSync();
-  img.Image? image;
-  String extension = p.extension(filepath);
-  if (extension == '.jpg' || extension == '.jpeg') {
-    image = img.decodeJpg(bytes);
-  } else if (extension == '.png') {
-    image = img.decodePng(bytes);
-  } else {
-    throw Exception('Unsupported image format');
-  }
-
-  LuminanceSource source = RGBLuminanceSource(image!.width, image.height,
-      image.getBytes(format: img.Format.abgr).buffer.asInt32List());
-  var bitmap = BinaryBitmap(HybridBinarizer(source));
+Result? scan(Uint8List bytes) {
+  img.Image image = img.decodeImage(bytes)!;
+  LuminanceSource source = RGBLuminanceSource(
+      image.width,
+      image.height,
+      image
+          .convert(numChannels: 4)
+          .getBytes(order: img.ChannelOrder.abgr)
+          .buffer
+          .asInt32List());
+  var bitmap = BinaryBitmap(GlobalHistogramBinarizer(source));
 
   var reader = QRCodeReader();
-  try {
-    var result = reader.decode(bitmap);
-    return result;
-  } on ReaderException {
-    return null;
-  }
+  var result = reader.decode(bitmap);
+  return result;
 }

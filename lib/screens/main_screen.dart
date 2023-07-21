@@ -1,11 +1,16 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Directory, Platform;
+import 'package:image/image.dart' as img;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
+import 'package:screenshotx/screenshotx.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -133,7 +138,7 @@ class ScanSection extends StatelessWidget {
           onPressed: () async {
             const XTypeGroup typeGroup = XTypeGroup(
               label: 'images',
-              extensions: <String>['jpg', 'png'],
+              extensions: <String>['jpg', 'jpeg', 'png'],
             );
             XFile? file;
 
@@ -147,16 +152,18 @@ class ScanSection extends StatelessWidget {
               // Operation was canceled by the user.
               return;
             }
-            final String filePath = file.path;
+            final imageBytes = await file.readAsBytes();
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScannerScreen(
-                  imagePath: filePath,
+            Future(() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScannerScreen(
+                    imageBytes: imageBytes,
+                  ),
                 ),
-              ),
-            );
+              );
+            });
           },
           label: Text(
             'Pick from files',
@@ -171,22 +178,17 @@ class ScanSection extends StatelessWidget {
             foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () async {
-            Directory directory = await getTemporaryDirectory();
-            String imageName =
-                'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
-            String imagePath =
-                '${directory.path}/qr_scanner/screenshots/$imageName';
-            CapturedData? capturedData = await screenCapturer.capture(
-              mode: CaptureMode.region,
-              imagePath: imagePath,
-            );
-            if (capturedData != null) {
+            final screenshotX = ScreenshotX();
+            var image = await screenshotX.captureFullScreen();
+            if (image != null) {
+              final bytes = await image.toByteData(format: ImageByteFormat.png);
+              final imageBytes = Uint8List.view(bytes!.buffer);
               Future(
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ScannerScreen(
-                      imagePath: capturedData.imagePath!,
+                      imageBytes: imageBytes,
                     ),
                   ),
                 ),

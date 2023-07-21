@@ -4,7 +4,7 @@ name: lasheen_qr
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.1+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -16,8 +16,8 @@ dependencies:
   path_provider: ^2.0.11
   path: ^1.8.2
   file_selector: ^0.9.2+2
-  zxing2: ^0.1.1
-  image: ^3.2.2
+  zxing2: ^0.2.0
+  image: ^4.0.17
   image_picker: ^0.8.6
   handy_window: ^0.3.1
   adwaita: ^0.5.2
@@ -31,6 +31,7 @@ dependencies:
   android_path_provider: ^0.3.0
   screen_capturer: ^0.1.6
   package_info_plus: ^4.0.2
+  screenshotx: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
