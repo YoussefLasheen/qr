@@ -31,7 +31,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
     return Scaffold(
       appBar: const YaruWindowTitleBar(
         title: Text('QR code generator'),
-        leading: BackButton(),
+        leading: YaruBackButton(),
       ),
       body: SizedBox(
         width: double.infinity,

@@ -22,6 +22,7 @@ class ScannerScreen extends StatelessWidget {
     return Scaffold(
       appBar: const YaruWindowTitleBar(
         title: Text('Scanner'),
+        leading: YaruBackButton(),
       ),
       body: result != null
           ? Center(
