@@ -26,7 +26,7 @@ dependencies:
   url_launcher: ^6.1.7
   yaru_widgets: ^2.0.0-beta-2
   flutter_spinbox: ^0.11.0
-  screenshot: ^1.2.3
+  screenshot: ^2.1.0
   gallery_saver: ^2.3.2
   android_path_provider: ^0.3.0
   gtk_window: ^0.0.2
