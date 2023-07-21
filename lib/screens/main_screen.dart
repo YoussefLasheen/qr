@@ -3,19 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io' show Directory, Platform;
-import 'package:image/image.dart' as img;
+import 'dart:io' show Platform;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screenshotx/screenshotx.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
-import 'camera_screen.dart';
 import 'scanner_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -112,21 +107,6 @@ class ScanSection extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // if (!Platform.isLinux)
-        //   ElevatedButton.icon(
-        //     style: ElevatedButton.styleFrom(
-        //       minimumSize: const Size.fromHeight(48),
-        //       foregroundColor: Theme.of(context).colorScheme.onSurface,
-        //     ),
-        //     onPressed: () => Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => const CameraScreen()),
-        //     ),
-        //     label: const Text('Open Camera'),
-        //     icon: const Icon(Icons.camera_alt_rounded),
-        //   ),
-        // const SizedBox(height: 10),
-
         const SizedBox(
           height: 16,
         ),

@@ -560,14 +560,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  screen_capturer:
-    dependency: "direct main"
-    description:
-      name: screen_capturer
-      sha256: "39001271f34eca330a1a59b735da0a0f546fc6f9f38b68554d6d2478baeb4025"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
   screen_retriever:
     dependency: transitive
     description:
@@ -608,14 +600,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  shell_executor:
-    dependency: transitive
-    description:
-      name: shell_executor
-      sha256: f89eb17bb2660568a255bb5612f2773ba9295792d7bb6b96e3ef87985a9457fa
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.4"
   sky_engine:
     dependency: transitive
     description: flutter

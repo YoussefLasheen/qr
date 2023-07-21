@@ -29,7 +29,6 @@ dependencies:
   screenshot: ^2.1.0
   gallery_saver: ^2.3.2
   android_path_provider: ^0.3.0
-  screen_capturer: ^0.1.6
   package_info_plus: ^4.0.2
   screenshotx: ^1.0.0
 dev_dependencies:
