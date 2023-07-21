@@ -20,22 +20,38 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: YaruWindowTitleBar(),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ScanSection(),
-          SizedBox(
-            height: 100,
-            child: VerticalDivider(
-              thickness: 1,
-            ),
+    return Scaffold(
+        appBar: const YaruWindowTitleBar(),
+        body: Center(
+          child: Table(
+            defaultColumnWidth: const FixedColumnWidth(225),
+            columnWidths: const <int, TableColumnWidth>{
+              0: FixedColumnWidth(225),
+              1: FixedColumnWidth(35),
+              2: FixedColumnWidth(225),
+            },
+            children: [
+              TableRow(children: [
+                Text(
+                  'SCAN',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+                const SizedBox.shrink(),
+                Text(
+                  'CREATE',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+              ]),
+              const TableRow(
+                children: [
+                  ScanSection(),
+                  SizedBox.shrink(),
+                  GeneratorSection(),
+                ],
+              ),
+            ],
           ),
-          GeneratorSection(),
-        ],
-      ),
-    );
+        ));
   }
 }
 
@@ -62,12 +78,10 @@ class ScanSection extends StatelessWidget {
         //     icon: const Icon(Icons.camera_alt_rounded),
         //   ),
         // const SizedBox(height: 10),
-        Text(
-          'SCAN',
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
 
-        const SizedBox(height: 10),
+        const SizedBox(
+          height: 16,
+        ),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(225, 48),
@@ -102,10 +116,10 @@ class ScanSection extends StatelessWidget {
             );
           },
           label: Text(
-            'Pick from gallery',
+            'Pick from files',
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
-          icon: const Icon(Icons.photo_library_rounded),
+          icon: const Icon(Icons.file_copy_rounded),
         ),
         const SizedBox(height: 10),
         ElevatedButton.icon(
@@ -154,11 +168,9 @@ class GeneratorSection extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'CREATE',
-          style: Theme.of(context).textTheme.displayLarge,
+        const SizedBox(
+          height: 16,
         ),
-        const SizedBox(height: 10),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(225, 48),
