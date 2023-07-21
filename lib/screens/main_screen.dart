@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gtk_window/gtk_window.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Platform;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
+import 'package:yaru_widgets/yaru_widgets.dart';
 
 import 'camera_screen.dart';
 import 'scanner_screen.dart';
@@ -27,11 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Platform.isLinux
-          ? const GTKHeaderBar(
-              middle: Text('QR Scanner'),
-            )
-          : null,
+      appBar: const YaruWindowTitleBar(),
       bottomNavigationBar: NavigationBar(
         destinations: const <NavigationDestination>[
           NavigationDestination(

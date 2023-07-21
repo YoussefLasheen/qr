@@ -19,17 +19,16 @@ dependencies:
   zxing2: ^0.1.1
   image: ^3.2.2
   image_picker: ^0.8.6
-  handy_window: ^0.1.9
+  handy_window: ^0.3.1
   adwaita: ^0.5.2
-  window_manager: ^0.2.8
+  window_manager: ^0.3.5
   pretty_qr_code: ^2.0.2
   url_launcher: ^6.1.7
-  yaru_widgets: ^2.0.0-beta-2
+  yaru_widgets: ^2.5.0
   flutter_spinbox: ^0.11.0
   screenshot: ^2.1.0
   gallery_saver: ^2.3.2
   android_path_provider: ^0.3.0
-  gtk_window: ^0.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

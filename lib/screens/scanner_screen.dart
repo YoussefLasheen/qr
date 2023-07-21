@@ -8,8 +8,8 @@ import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:path/path.dart' as p;
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yaru_widgets/yaru_widgets.dart';
 import 'package:zxing2/qrcode.dart';
-import 'package:gtk_window/gtk_window.dart';
 
 class ScannerScreen extends StatelessWidget {
   final String imagePath;
@@ -20,11 +20,9 @@ class ScannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Result? result = scan(imagePath);
     return Scaffold(
-      appBar: Platform.isLinux
-          ? const GTKHeaderBar(
-              middle: Text('Scaning result'),
-            )
-          : null,
+      appBar: const YaruWindowTitleBar(
+        title: Text('Scanner'),
+      ),
       body: result != null
           ? Center(
               child: SizedBox(

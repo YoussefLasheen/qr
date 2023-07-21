@@ -2,7 +2,6 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:gtk_window/gtk_window.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -25,16 +24,15 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
   bool roundEdges = true;
   int errorCorrectLevel = QrErrorCorrectLevel.M;
 
-  ScreenshotController screenshotController = ScreenshotController(); 
+  ScreenshotController screenshotController = ScreenshotController();
   @override
   Widget build(BuildContext context) {
     content ??= widget.initialContent;
     return Scaffold(
-      appBar: Platform.isLinux
-          ? const GTKHeaderBar(
-              middle: Text('QR Code Generator'),
-            )
-          : null,
+      appBar: const YaruWindowTitleBar(
+        title: Text('QR code generator'),
+        leading: BackButton(),
+      ),
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
@@ -78,8 +76,9 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                       child: TextFormField(
                         initialValue: widget.initialContent,
                         maxLength: calculateMaxInput(
-                            version: version,
-                            errorCorrectLevel: errorCorrectLevel,),
+                          version: version,
+                          errorCorrectLevel: errorCorrectLevel,
+                        ),
                         onChanged: (value) {
                           setState(() {
                             content = value;
@@ -117,7 +116,8 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                             ),
                           ),
                           YaruSwitchListTile(
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 6),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 6),
                             title: const Text('Rounded corners'),
                             value: roundEdges,
                             onChanged: (value) {
@@ -127,15 +127,18 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                             },
                           ),
                           YaruSwitchListTile(
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 6),
-                            title: const Text('Calculate version automatically'),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 6),
+                            title:
+                                const Text('Calculate version automatically'),
                             value: version == null,
                             onChanged: (value) {
                               if (!value) {
                                 for (var i = 1; i < 40; i++) {
                                   if (calculateMaxInput(
-                                          version: i,
-                                          errorCorrectLevel: errorCorrectLevel,) >
+                                        version: i,
+                                        errorCorrectLevel: errorCorrectLevel,
+                                      ) >
                                       content!.length) {
                                     setState(() {
                                       version = i;
@@ -154,24 +157,26 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                           YaruTile(
                             enabled: version != null,
                             title: const Text('Version'),
-                            subtitle: const Text('The higher the number the denser the QR code'),
+                            subtitle: const Text(
+                                'The higher the number the denser the QR code'),
                             trailing: SizedBox(
                               width: 100,
                               height: 50,
                               child: SpinBox(
-                                enabled:  version != null,
+                                enabled: version != null,
                                 spacing: 0,
                                 enableInteractiveSelection: false,
                                 showCursor: false,
                                 min: 1,
                                 max: 40,
-                                value: (version??0).toDouble(),
+                                value: (version ?? 0).toDouble(),
                                 direction: Axis.horizontal,
                                 canChange: (value) {
                                   if (value < 1) return false;
                                   int maxInputLength = calculateMaxInput(
-                                      version: value.toInt(),
-                                      errorCorrectLevel: errorCorrectLevel,);
+                                    version: value.toInt(),
+                                    errorCorrectLevel: errorCorrectLevel,
+                                  );
                                   if (maxInputLength >= content!.length) {
                                     setState(() {
                                       version = value.toInt();
@@ -199,9 +204,10 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                                 ),
                                 PopupMenuItem(
                                   enabled: calculateMaxInput(
-                                          version: version,
-                                          errorCorrectLevel:
-                                              QrErrorCorrectLevel.M,) >
+                                        version: version,
+                                        errorCorrectLevel:
+                                            QrErrorCorrectLevel.M,
+                                      ) >
                                       content!.length,
                                   child: const Text('M'),
                                   onTap: () {
@@ -251,10 +257,10 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                     style: TextButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
-                       minimumSize: const Size.fromHeight(65),
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(15.0),
-                       ),
+                      minimumSize: const Size.fromHeight(65),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                     ),
                     onPressed: () async {
                       screenshotController
@@ -277,7 +283,8 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                           .then((imageBytes) async {
                         String? outputFile;
                         if (Platform.isAndroid) {
-                          outputFile = '${await AndroidPathProvider.downloadsPath}/qrcode.png';
+                          outputFile =
+                              '${await AndroidPathProvider.downloadsPath}/qrcode.png';
                         } else {
                           outputFile = await getSavePath(
                               suggestedName: 'qrcode.png',
@@ -297,7 +304,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                               content: Text('Saved to $outputFile'),
                             ),
                           );
-                        }else{
+                        } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Qr code not saved'),
@@ -329,9 +336,10 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
   }
 }
 
-int calculateMaxInput(
-    {required int errorCorrectLevel,
-    required int? version,}) {
+int calculateMaxInput({
+  required int errorCorrectLevel,
+  required int? version,
+}) {
   version ??= 40;
   return capacities[(version * 4) + levels[errorCorrectLevel]];
 }
