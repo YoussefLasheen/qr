@@ -3,8 +3,11 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Directory, Platform;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 import 'camera_screen.dart';
@@ -21,7 +24,47 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const YaruWindowTitleBar(),
+        appBar: YaruWindowTitleBar(
+          leading: YaruIconButton(
+            icon: const Icon(Icons.help_outline_rounded),
+            onPressed: () async {
+              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+              Future(() {
+                showAboutDialog(
+                  context: context,
+                  applicationIcon: Image.asset(
+                    'assets/icon.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  applicationName: 'QR Scanner',
+                  applicationVersion:
+                      '${packageInfo.version}+${packageInfo.buildNumber}',
+                  children: [
+                    const Text(
+                      'A QR Code Scanner and Generator app built with Flutter.',
+                    ),
+                    const SizedBox(height: 35),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => launchUrlString('https://lasheen.dev'),
+                          child: Image.asset(
+                            'assets/madebylasheen.png',
+                            width: 250,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              });
+            },
+          ),
+          title: Text('QR Scanner'),
+        ),
         body: Center(
           child: Table(
             defaultColumnWidth: const FixedColumnWidth(225),
