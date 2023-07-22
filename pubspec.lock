@@ -579,26 +579,23 @@ packages:
   screenshotx:
     dependency: "direct main"
     description:
-      name: screenshotx
-      sha256: da7c0d7c1fc511caf2048167dd36d6ab6dc7f36be9a39789cabe7c9a93549096
-      url: "https://pub.dev"
-    source: hosted
+      path: "../forks/flutter_screenshotx/screenshotx"
+      relative: true
+    source: path
     version: "1.0.0"
   screenshotx_linux:
     dependency: transitive
     description:
-      name: screenshotx_linux
-      sha256: "7cc0369c763275d28d95e16f6134d6e2a9fceb1f78e29b7e10c8765faeeea4f5"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../forks/flutter_screenshotx/screenshotx_linux"
+      relative: true
+    source: path
     version: "1.0.0"
   screenshotx_platform_interface:
     dependency: transitive
     description:
-      name: screenshotx_platform_interface
-      sha256: "5b2291bca014729c0108f60e0c2f2a220abbd81452df09394a71bab0f610acbb"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../forks/flutter_screenshotx/screenshotx_platform_interface"
+      relative: true
+    source: path
     version: "1.0.0"
   sky_engine:
     dependency: transitive

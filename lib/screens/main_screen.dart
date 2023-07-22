@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -10,6 +11,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screenshotx/screenshotx.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
+import 'package:zxing2/qrcode.dart';
+import 'package:zxing2/zxing2.dart';
+import 'package:image/image.dart' as img;
 
 import 'scanner_screen.dart';
 
@@ -134,16 +138,29 @@ class ScanSection extends StatelessWidget {
             }
             final imageBytes = await file.readAsBytes();
 
-            Future(() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ScannerScreen(
-                    imageBytes: imageBytes,
+            Result? result = scan(imageBytes);
+            if (result == null) {
+              Future(() {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No QR Code found in the image.'),
                   ),
-                ),
+                );
+              });
+            } else {
+              Future(
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScannerScreen(
+                        result: result!,
+                      ),
+                    ),
+                  );
+                },
               );
-            });
+            }
           },
           label: Text(
             'Pick from files',
@@ -159,20 +176,34 @@ class ScanSection extends StatelessWidget {
           ),
           onPressed: () async {
             final screenshotX = ScreenshotX();
-            var image = await screenshotX.captureFullScreen();
+            var image = await screenshotX.captureFullScreen(showOptions: true);
             if (image != null) {
               final bytes = await image.toByteData(format: ImageByteFormat.png);
               final imageBytes = Uint8List.view(bytes!.buffer);
-              Future(
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ScannerScreen(
-                      imageBytes: imageBytes,
+
+              Result? result = scan(imageBytes);
+              if (result == null) {
+                Future(() {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('No QR Code found in the screenshot.'),
                     ),
-                  ),
-                ),
-              );
+                  );
+                });
+              } else {
+                Future(
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScannerScreen(
+                          result: result!,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
             }
           },
           label: const Text('Take a screenshot'),
@@ -210,5 +241,25 @@ class GeneratorSection extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+Result? scan(Uint8List bytes) {
+  img.Image image = img.decodeImage(bytes)!;
+  LuminanceSource source = RGBLuminanceSource(
+      image.width,
+      image.height,
+      image
+          .convert(numChannels: 4)
+          .getBytes(order: img.ChannelOrder.abgr)
+          .buffer
+          .asInt32List());
+  var bitmap = BinaryBitmap(GlobalHistogramBinarizer(source));
+
+  var reader = QRCodeReader();
+  try {
+    return reader.decode(bitmap);
+  } catch (e) {
+    return null;
   }
 }

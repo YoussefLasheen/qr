@@ -30,7 +30,12 @@ dependencies:
   gallery_saver: ^2.3.2
   android_path_provider: ^0.3.0
   package_info_plus: ^4.0.2
-  screenshotx: ^1.0.0
+  # screenshotx:
+  #   git: 
+  #     url: https://github.com/YoussefLasheen/flutter_screenshotx.git
+  #     path: screenshotx
+  screenshotx: 
+    path: ../forks/flutter_screenshotx/screenshotx
 dev_dependencies:
   flutter_test:
     sdk: flutter

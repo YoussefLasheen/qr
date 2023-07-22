@@ -8,133 +8,95 @@ import 'package:yaru_widgets/yaru_widgets.dart';
 import 'package:zxing2/qrcode.dart';
 
 class ScannerScreen extends StatelessWidget {
-  final Uint8List imageBytes;
+  final Result result;
 
-  const ScannerScreen({super.key, required this.imageBytes});
+  const ScannerScreen({super.key, required this.result});
 
   @override
   Widget build(BuildContext context) {
-    Result? result = scan(imageBytes);
     return Scaffold(
       appBar: const YaruWindowTitleBar(
         title: Text('Scanner'),
         leading: YaruBackButton(),
       ),
-      body: result != null
-          ? Center(
-              child: SizedBox(
-                width: 350,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(25),
-                        child: PrettyQr(
-                          data: result.text,
-                          elementColor: Theme.of(context).colorScheme.onSurface,
-                          size: 300,
-                          roundEdges: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Card(
-                        margin: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 25, top: 25, bottom: 25),
-                                child: SelectableText(result.text,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    minLines: 1,
-                                    maxLines: 3, onTap: () async {
-                                  if (await canLaunchUrl(
-                                      Uri.parse(result.text))) {
-                                    launchUrl(Uri.parse(result.text));
-                                  }
-                                }),
-                              ),
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(15),
-                              onTap: () {
-                                Clipboard.setData(
-                                    ClipboardData(text: result.text));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Copied to clipboard'),
-                                  ),
-                                );
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Icon(
-                                  Icons.copy,
-                                  size: 25,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+      body: Center(
+        child: SizedBox(
+          width: 350,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: PrettyQr(
+                    data: result.text,
+                    elementColor: Theme.of(context).colorScheme.onSurface,
+                    size: 300,
+                    roundEdges: true,
+                  ),
                 ),
               ),
-            )
-          : Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'No QR code found',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Go back'))
-                ],
+              const SizedBox(
+                height: 10,
               ),
-            ),
+              SizedBox(
+                width: double.infinity,
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 25, top: 25, bottom: 25),
+                          child: SelectableText(result.text,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              minLines: 1,
+                              maxLines: 3, onTap: () async {
+                            if (await canLaunchUrl(Uri.parse(result.text))) {
+                              launchUrl(Uri.parse(result.text));
+                            }
+                          }),
+                        ),
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: result.text));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Copied to clipboard'),
+                            ),
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Icon(
+                            Icons.copy,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-}
-
-Result? scan(Uint8List bytes) {
-  img.Image image = img.decodeImage(bytes)!;
-  LuminanceSource source = RGBLuminanceSource(
-      image.width,
-      image.height,
-      image
-          .convert(numChannels: 4)
-          .getBytes(order: img.ChannelOrder.abgr)
-          .buffer
-          .asInt32List());
-  var bitmap = BinaryBitmap(GlobalHistogramBinarizer(source));
-
-  var reader = QRCodeReader();
-  var result = reader.decode(bitmap);
-  return result;
 }
