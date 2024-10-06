@@ -24,7 +24,6 @@ dependencies:
   yaru_widgets: ^3.6.0
   flutter_spinbox: ^0.13.1
   screenshot: ^3.0.0
-  gallery_saver: ^2.3.2
   package_info_plus: ^8.0.2 
   screenshotx: ^1.0.0
 dev_dependencies:
