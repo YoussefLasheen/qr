@@ -6,8 +6,9 @@ import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screenshotx/screenshotx.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:yaru_widgets/yaru_widgets.dart';
+import 'package:yaru/yaru.dart';
 import 'package:zxing2/qrcode.dart';
 import 'package:image/image.dart' as img;
 
@@ -110,11 +111,7 @@ class ScanSection extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(225, 48),
-            foregroundColor: Theme.of(context).colorScheme.onSurface,
-          ),
+        ShadButton(
           onPressed: () async {
             const XTypeGroup typeGroup = XTypeGroup(
               label: 'images',
@@ -153,18 +150,11 @@ class ScanSection extends StatelessWidget {
               );
             }
           },
-          label: Text(
-            'Pick from files',
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-          ),
           icon: const Icon(Icons.file_copy_rounded),
+          child: const Text('Pick from files'),
         ),
         const SizedBox(height: 10),
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(225, 48),
-            foregroundColor: Theme.of(context).colorScheme.onSurface,
-          ),
+        ShadButton(
           onPressed: () async {
             final screenshotX = ScreenshotX();
             var image = await screenshotX.captureFullScreen();
@@ -197,8 +187,8 @@ class ScanSection extends StatelessWidget {
               }
             }
           },
-          label: const Text('Take a screenshot'),
           icon: const Icon(Icons.screenshot_monitor_rounded),
+          child: const Text('Take a screenshot'),
         ),
         const SizedBox(height: 10),
       ],
@@ -218,17 +208,13 @@ class GeneratorSection extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(225, 48),
-            foregroundColor: Theme.of(context).colorScheme.onSurface,
-          ),
+        ShadButton(
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const GeneratorScreen()),
           ),
-          label: const Text('Generate QR Code'),
           icon: const Icon(Icons.qr_code_rounded),
+          child: const Text('Generate QR Code'),
         ),
       ],
     );

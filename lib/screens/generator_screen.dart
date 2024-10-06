@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:yaru_widgets/yaru_widgets.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:yaru/yaru.dart';
 import 'dart:io';
 
 class GeneratorScreen extends StatefulWidget {
@@ -45,222 +46,175 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Card(
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                  ShadCard(
+                    padding: const EdgeInsets.all(25),
+                    child: PrettyQr(
+                      data: content!,
+                      elementColor: Theme.of(context).colorScheme.onSurface,
+                      size: 300,
+                      roundEdges: roundEdges,
+                      typeNumber: version,
+                      errorCorrectLevel: errorCorrectLevel,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(25),
-                      child: PrettyQr(
-                        data: content!,
-                        elementColor: Theme.of(context).colorScheme.onSurface,
-                        size: 300,
-                        roundEdges: roundEdges,
-                        typeNumber: version,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ShadCard(
+                    padding: const EdgeInsets.all(25),
+                    child: TextFormField(
+                      initialValue: widget.initialContent,
+                      maxLength: calculateMaxInput(
+                        version: version,
                         errorCorrectLevel: errorCorrectLevel,
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Card(
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(25),
-                      child: TextFormField(
-                        initialValue: widget.initialContent,
-                        maxLength: calculateMaxInput(
-                          version: version,
-                          errorCorrectLevel: errorCorrectLevel,
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            content = value;
-                          });
-                        },
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          labelText: 'Content',
-                          hintText: 'Enter a link to generate a QR code',
-                        ),
+                      onChanged: (value) {
+                        setState(() {
+                          content = value;
+                        });
+                      },
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        labelText: 'Content',
+                        hintText: 'Enter a link to generate a QR code',
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Card(
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(25),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'QR code settings',
-                              style: Theme.of(context).textTheme.displaySmall,
+                  ShadCard(
+                    padding: const EdgeInsets.all(25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'QR code settings',
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        ShadSwitch(
+                          label: const Text('Rounded corners'),
+                          value: roundEdges,
+                          onChanged: (value) {
+                            setState(() {
+                              roundEdges = value;
+                            });
+                          },
+                        ),
+                        ShadSwitch(
+                          label: const Text('Calculate version automatically'),
+                          value: version == null,
+                          onChanged: (value) {
+                            if (!value) {
+                              for (var i = 1; i < 40; i++) {
+                                if (calculateMaxInput(
+                                      version: i,
+                                      errorCorrectLevel: errorCorrectLevel,
+                                    ) >
+                                    content!.length) {
+                                  setState(() {
+                                    version = i;
+                                    //calculateVersionAutomatically = false;
+                                  });
+                                  break;
+                                }
+                              }
+                            } else {
+                              setState(() {
+                                version = null;
+                              });
+                            }
+                          },
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          enabled: version != null,
+                          title: const Text('Version'),
+                          subtitle: const Text(
+                              'The higher the number the denser the QR code'),
+                          trailing: SizedBox(
+                            width: 100,
+                            height: 50,
+                            child: SpinBox(
+                              enabled: version != null,
+                              spacing: 0,
+                              enableInteractiveSelection: false,
+                              showCursor: false,
+                              min: 1,
+                              max: 40,
+                              value: (version ?? 0).toDouble(),
+                              direction: Axis.horizontal,
+                              canChange: (value) {
+                                if (value < 1) return false;
+                                int maxInputLength = calculateMaxInput(
+                                  version: value.toInt(),
+                                  errorCorrectLevel: errorCorrectLevel,
+                                );
+                                if (maxInputLength >= content!.length) {
+                                  setState(() {
+                                    version = value.toInt();
+                                  });
+                                  return true;
+                                }
+                                return false;
+                              },
                             ),
                           ),
-                          YaruSwitchListTile(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 6),
-                            title: const Text('Rounded corners'),
-                            value: roundEdges,
-                            onChanged: (value) {
-                              setState(() {
-                                roundEdges = value;
-                              });
-                            },
-                          ),
-                          YaruSwitchListTile(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 6),
-                            title:
-                                const Text('Calculate version automatically'),
-                            value: version == null,
-                            onChanged: (value) {
-                              if (!value) {
-                                for (var i = 1; i < 40; i++) {
-                                  if (calculateMaxInput(
-                                        version: i,
-                                        errorCorrectLevel: errorCorrectLevel,
-                                      ) >
-                                      content!.length) {
-                                    setState(() {
-                                      version = i;
-                                      //calculateVersionAutomatically = false;
-                                    });
-                                    break;
-                                  }
-                                }
-                              } else {
-                                setState(() {
-                                  version = null;
-                                });
-                              }
-                            },
-                          ),
-                          YaruTile(
-                            enabled: version != null,
-                            title: const Text('Version'),
-                            subtitle: const Text(
-                                'The higher the number the denser the QR code'),
-                            trailing: SizedBox(
-                              width: 100,
-                              height: 50,
-                              child: SpinBox(
-                                enabled: version != null,
-                                spacing: 0,
-                                enableInteractiveSelection: false,
-                                showCursor: false,
-                                min: 1,
-                                max: 40,
-                                value: (version ?? 0).toDouble(),
-                                direction: Axis.horizontal,
-                                canChange: (value) {
-                                  if (value < 1) return false;
-                                  int maxInputLength = calculateMaxInput(
-                                    version: value.toInt(),
-                                    errorCorrectLevel: errorCorrectLevel,
-                                  );
-                                  if (maxInputLength >= content!.length) {
-                                    setState(() {
-                                      version = value.toInt();
-                                    });
-                                    return true;
-                                  }
-                                  return false;
-                                },
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: const Text('Error correction level'),
+                          subtitle: const Text('L is the '
+                              'lowest and H is the highest.'),
+                          trailing: DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: PopupMenuButton<int>(
+                                itemBuilder: (c) => [
+                                  for (final level
+                                      in QrErrorCorrectLevel.levels)
+                                    PopupMenuItem(
+                                      enabled: calculateMaxInput(
+                                            version: version,
+                                            errorCorrectLevel: level,
+                                          ) >=
+                                          content!.length,
+                                      child: Text(levelsNames[level]),
+                                      onTap: () {
+                                        setState(() {
+                                          errorCorrectLevel = level;
+                                        });
+                                      },
+                                    ),
+                                ],
+                                child: Text(levelsNames[errorCorrectLevel]),
                               ),
                             ),
                           ),
-                          YaruTile(
-                            title: const Text('Error correction level'),
-                            subtitle: const Text('L is the '
-                                'lowest and H is the highest.'),
-                            trailing: YaruPopupMenuButton<int>(
-                              itemBuilder: (c) => [
-                                PopupMenuItem(
-                                  child: const Text('L'),
-                                  onTap: () {
-                                    setState(() {
-                                      errorCorrectLevel = QrErrorCorrectLevel.L;
-                                    });
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  enabled: calculateMaxInput(
-                                        version: version,
-                                        errorCorrectLevel:
-                                            QrErrorCorrectLevel.M,
-                                      ) >
-                                      content!.length,
-                                  child: const Text('M'),
-                                  onTap: () {
-                                    setState(() {
-                                      errorCorrectLevel = QrErrorCorrectLevel.M;
-                                    });
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  enabled: calculateMaxInput(
-                                          version: version,
-                                          errorCorrectLevel:
-                                              QrErrorCorrectLevel.Q) >
-                                      content!.length,
-                                  child: const Text('Q'),
-                                  onTap: () {
-                                    setState(() {
-                                      errorCorrectLevel = QrErrorCorrectLevel.Q;
-                                    });
-                                  },
-                                ),
-                                PopupMenuItem(
-                                  enabled: calculateMaxInput(
-                                          version: version,
-                                          errorCorrectLevel:
-                                              QrErrorCorrectLevel.H) >
-                                      content!.length,
-                                  child: const Text('H'),
-                                  onTap: () {
-                                    setState(() {
-                                      errorCorrectLevel = QrErrorCorrectLevel.H;
-                                    });
-                                  },
-                                ),
-                              ],
-                              child: Text(levelsNames[errorCorrectLevel]),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton.icon(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                      foregroundColor: Theme.of(context).colorScheme.onSurface,
-                      minimumSize: const Size.fromHeight(65),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
+                  ShadButton(
                     onPressed: () async {
                       screenshotController
                           .captureFromWidget(
@@ -270,7 +224,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: PrettyQr(
                               data: content!,
-                              elementColor: Colors.black,
+                              // elementColor: Colors.black,
                               size: 300,
                               roundEdges: roundEdges,
                               typeNumber: version,
@@ -318,7 +272,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                       });
                     },
                     icon: const Icon(Icons.save),
-                    label: const Text('Save QR code'),
+                    child: const Text('Save QR code'),
                   ),
                   const SizedBox(
                     height: 10,
