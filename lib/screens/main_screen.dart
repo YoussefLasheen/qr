@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -12,7 +11,6 @@ import 'package:screenshotx/screenshotx.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 import 'package:zxing2/qrcode.dart';
-import 'package:zxing2/zxing2.dart';
 import 'package:image/image.dart' as img;
 
 import 'scanner_screen.dart';
@@ -67,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
               });
             },
           ),
-          title: Text('QR Scanner'),
+          title: const Text('QR Scanner'),
         ),
         body: Center(
           child: Table(
@@ -154,7 +152,7 @@ class ScanSection extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ScannerScreen(
-                        result: result!,
+                        result: result,
                       ),
                     ),
                   );
@@ -197,7 +195,7 @@ class ScanSection extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ScannerScreen(
-                          result: result!,
+                          result: result,
                         ),
                       ),
                     );

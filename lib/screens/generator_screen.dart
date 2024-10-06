@@ -112,7 +112,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'QR code settings',
-                              style: Theme.of(context).textTheme.headline3,
+                              style: Theme.of(context).textTheme.displaySmall,
                             ),
                           ),
                           YaruSwitchListTile(
