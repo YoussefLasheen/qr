@@ -12,13 +12,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  camera: ^0.11.0+2
   path_provider: ^2.1.4
   path: ^1.9.0
   file_selector: ^1.0.3
   zxing2: ^0.2.3
   image: ^4.2.0
-  image_picker: ^1.1.2
   handy_window: ^0.4.0
   adwaita: ^1.1.0
   window_manager: ^0.4.2
@@ -28,7 +26,6 @@ dependencies:
   flutter_spinbox: ^0.13.1
   screenshot: ^3.0.0
   gallery_saver: ^2.3.2
-  android_path_provider: ^0.3.0
   package_info_plus: ^8.0.2 
   screenshotx: ^1.0.0
 dev_dependencies:

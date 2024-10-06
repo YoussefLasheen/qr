@@ -2,8 +2,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io' show Platform;
 import 'package:file_selector/file_selector.dart';
 import 'package:lasheen_qr/screens/generator_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -122,14 +120,9 @@ class ScanSection extends StatelessWidget {
               label: 'images',
               extensions: <String>['jpg', 'jpeg', 'png'],
             );
-            XFile? file;
+            XFile? file =
+                await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
 
-            if (Platform.isAndroid || Platform.isIOS) {
-              file = await ImagePicker().pickImage(source: ImageSource.gallery);
-            } else {
-              file =
-                  await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-            }
             if (file == null) {
               // Operation was canceled by the user.
               return;
