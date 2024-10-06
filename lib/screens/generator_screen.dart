@@ -286,7 +286,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                           outputFile =
                               '${await AndroidPathProvider.downloadsPath}/qrcode.png';
                         } else {
-                          outputFile = await getSavePath(
+                          final location = await getSaveLocation(
                               suggestedName: 'qrcode.png',
                               acceptedTypeGroups: [
                                 const XTypeGroup(
@@ -294,6 +294,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
                                   extensions: <String>['png'],
                                 )
                               ]);
+                          outputFile = location?.path;
                         }
                         if (outputFile != null) {
                           File image = File(outputFile);

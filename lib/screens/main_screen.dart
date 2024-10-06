@@ -174,7 +174,7 @@ class ScanSection extends StatelessWidget {
           ),
           onPressed: () async {
             final screenshotX = ScreenshotX();
-            var image = await screenshotX.captureFullScreen(showOptions: true);
+            var image = await screenshotX.captureFullScreen();
             if (image != null) {
               final bytes = await image.toByteData(format: ImageByteFormat.png);
               final imageBytes = Uint8List.view(bytes!.buffer);
